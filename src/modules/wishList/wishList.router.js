@@ -1,23 +1,14 @@
-
-
 import { Router } from 'express'
-import { addBrand, allBrands, deleteBrand, getBrand, getLoggedUserToWishList, removeToWishList, updateBrand } from './wishList.controller.js'
-import { protectedRouters } from '../auth/user.controller.js'
+import { allowedTo, protectedRouters } from '../auth/user.controller.js'
+import { addToWishList, getLoggedUserToWishList, removeFromWishList } from '../wishList/wishList.controller.js'
 
-
-const wishListRouter=Router()
+const wishListRouter = Router()
 
 wishListRouter.route('/')
-.post(protectedRouters,addToWishList)
-.get(getLoggedUserToWishList)
+   .post(protectedRouters, allowedTo('user'), addToWishList)
+   .get(protectedRouters, allowedTo('user'), getLoggedUserToWishList) // تمت إضافة الحماية هنا
 
 wishListRouter.route('/:id')
-
-.delete(removeToWishList)
-
-
-
-
-
+   .delete(protectedRouters, allowedTo('user'), removeFromWishList) // تمت إضافة الحماية هنا
 
 export default wishListRouter

@@ -24,7 +24,7 @@ const changePassword =catchError(async (req, res, next) => {
     let user = await User.findOne({email:req.body.email})
     if (user&&bcrypt.compareSync(req.body.oldPassword,user.password)) {
         let user = await User.findOneAndUpdate({email:req.body.email},{password:req.body.newPassword,passwordChangedAt : Date.now()},{new:true})
-        let token =jwt.sign({userId:user._id,role:user.role},'myNameIsAbdo')
+        let token =jwt.sign({userId:user._id,role:user.role},process.env.JWT_KEY)
         return res.json({message:'success',token})        
     }
     return next(new AppError('inccrct email or password',401))
@@ -33,7 +33,7 @@ const protectedRouters =catchError(async (req, res, next) => {
     let {token}=req.headers
     let userPayload=null;
     if (!token) return next(new AppError('token is inprovded'))    
-    jwt.verify(token,'myNameIsAbdo',(err,payload)=>{
+    jwt.verify(token,process.env.JWT_KEY,(err,payload)=>{
         if(err) return next(new AppError('token invaild...login again'))
             userPayload=payload
             console.log(userPayload);            

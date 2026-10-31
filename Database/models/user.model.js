@@ -33,7 +33,7 @@ const schema = new Schema({
 schema.pre("save",function(){
     this.password=bcrypt.hashSync(this.password,8)
 })
-schema.pre("findOneAndUpdate",function(){
+schema.pre("findByIdAndUpdate",function(){
     this._update.password=bcrypt.hashSync(this._update.password,8)
     
     
