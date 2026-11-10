@@ -68,7 +68,7 @@ const schema = new Schema({
     createdBy: {
         type: Types.ObjectId,
         ref: 'User',
-        required: true
+        required: false
     }
 }, {
     timestamps: true,
